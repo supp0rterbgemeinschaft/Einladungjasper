@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Charakterakte: Jasper Kohl | Zirkus Absurdum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- Dunkelmodus (Standard) --- */
+            --primary-dark: #1a0a0a;
+            --primary-red: #8b0000;
+            --accent-gold: #d4af37;
+            --accent-cream: #f5e6c8;
+            --text-light: #f3ebd7; 
+            --text-muted: #c4b59d;
+            --card-bg: rgba(30, 15, 15, 0.95);
+            --border-color: rgba(212, 175, 55, 0.3);
+            --header-gradient: linear-gradient(135deg, rgba(139, 0, 0, 0.25), rgba(30, 15, 15, 0.8));
+            --highlight-bg: rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Hell-Modus Variablen --- */
+        body.light-mode {
+            --primary-dark: #fdfbf7;
+            --primary-red: #8b0000;
+            --accent-gold: #b08d1e;
+            --accent-cream: #2c1810;
+            --text-light: #1a0a0a;
+            --text-muted: #594a42;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(176, 141, 30, 0.4);
+            --header-gradient: linear-gradient(135deg, rgba(139, 0, 0, 0.1), rgba(255, 255, 255, 0.8));
+            --highlight-bg: rgba(240, 235, 220, 0.6);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Lato', Helvetica, Arial, sans-serif;
+            background: var(--primary-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.7;
+            transition: background 0.3s ease, color 0.3s ease;
+            padding-bottom: 5rem;
+            font-size: 16px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at top, rgba(139, 0, 0, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at bottom, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            z-index: 100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+            -webkit-appearance: none; 
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 1rem; }
+        
+        /* --- Header --- */
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .circus-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .character-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            color: var(--accent-cream);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .character-role {
+            font-family: 'Lato', sans-serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--primary-red);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+        
+        .character-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Collapsible Sections --- */
+        .section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            background: var(--header-gradient);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer; 
+            border-bottom: 1px solid transparent;
+            transition: background 0.3s ease;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .section.open .section-header {
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(139, 0, 0, 0.1);
+        }
+        
+        .header-content { display: flex; align-items: center; gap: 1rem; pointer-events: none; }
+        .section-icon { font-size: 1.5rem; }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .toggle-icon {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            pointer-events: none;
+        }
+
+        .section.open .toggle-icon { transform: rotate(180deg); }
+        
+        .section-content { 
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.4s ease, padding 0.4s ease;
+            cursor: auto; 
+        }
+
+        .section.open .section-content {
+            max-height: 5000px; 
+            opacity: 1;
+            padding: 1.5rem;
+        }
+        
+        /* --- Content Styles --- */
+        .essence-box {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(212, 175, 55, 0.1));
+            border-left: 4px solid var(--primary-red);
+            padding: 1.5rem;
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: 1.8;
+            margin: 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .text-content { font-size: 1.05rem; line-height: 1.9; }
+        
+        .trait-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .trait-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--highlight-bg);
+            border-left: 3px solid var(--accent-gold);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .trait-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .trait-label { font-weight: 700; color: var(--accent-cream); display: block; margin-bottom: 0.25rem; }
+        .trait-desc { font-size: 0.95rem; color: var(--text-muted); }
+        
+        .phrases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .phrase-item {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            padding: 1rem 1rem 1rem 2rem;
+            background: var(--highlight-bg);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cream);
+            position: relative;
+            border-radius: 4px;
+            letter-spacing: -0.5px;
+            word-break: break-word;
+        }
+        .phrase-item::before { content: '»'; position: absolute; left: 0.75rem; color: var(--accent-gold); font-weight: bold; }
+        
+        .relationship-item {
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            background: var(--highlight-bg);
+            border: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 1rem;
+            border-radius: 4px;
+        }
+        .relationship-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            border-right: 1px solid var(--border-color);
+            padding-right: 1rem;
+        }
+        .relationship-role {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            display: block;
+            margin-top: 0.25rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .mission-box {
+            background: rgba(139, 0, 0, 0.08);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+        .mission-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            margin-bottom: 0.5rem;
+        }
+        .mission-subtitle {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .mission-list { list-style: none; padding-left: 0; }
+        .mission-list li { padding: 0.3rem 0 0.3rem 1.5rem; position: relative; }
+        .mission-list li::before { content: '◆'; position: absolute; left: 0; color: var(--accent-gold); font-size: 0.7rem; }
+        
+        /* Internal Secrets (Nested Accordion) */
+        .secret-box {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(139, 0, 0, 0.05));
+            border: 1px solid var(--border-color);
+            margin-bottom: 0.75rem;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .secret-inner-header {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            transition: background 0.2s;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .secret-inner-header:hover { background: rgba(255, 255, 255, 0.07); }
+        .secret-number {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+        .secret-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-cream);
+            margin-top: 0.25rem;
+            pointer-events: none;
+        }
+        .secret-inner-content {
+            display: none;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.2);
+            cursor: auto; 
+        }
+        .secret-box.active .secret-inner-content { display: block; animation: slideDown 0.3s ease; }
+        .secret-box.active .secret-toggle-icon { transform: rotate(180deg); }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(139, 0, 0, 0.1));
+            border: 1px solid var(--accent-gold);
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .highlight-box p { font-size: 1.1rem; font-style: italic; line-height: 1.8; }
+        
+        .play-tips { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .play-tip { display: flex; gap: 0.75rem; padding: 0.75rem; background: var(--highlight-bg); border-radius: 4px; align-items: center; }
+        .play-tip-icon { color: var(--accent-gold); font-size: 1.2rem; }
+        
+        .improv-example {
+            background: var(--highlight-bg);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--primary-red);
+        }
+        .improv-question { font-style: italic; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .improv-answer { color: var(--accent-cream); }
+        .improv-answer::before { content: '→ '; color: var(--accent-gold); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-circus {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+        .footer-tagline {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 600px) {
+            .relationship-item { grid-template-columns: 1fr; }
+            .relationship-name { border-right: none; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Hell</button>
+
+    <div class="container">
+        <header>
+            <div class="circus-title">🎪 Zirkus Absurdum – Charakterakte 🎪</div>
+            <h1 class="character-name">Jasper Kohl</h1>
+            <p class="character-role">Bauchredner & Sicherheitsbeauftragter</p>
+            <div class="character-meta">
+                <span>📅 25 Jahre</span>
+                <span>⏱️ 2–3 Jahre im Zirkus</span>
+            </div>
+        </header>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">🧠</span>
+                    <h2 class="section-title">Deine persönliche Essenz</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="essence-box">
+                    Jasper ist ein neurotischer Sicherheitsfanatiker mit einer Bauchredner-Puppe als einzigem echten Kommunikationskanal. Früher prüfte er Versicherungsfälle, heute prüft er jeden Bolzen und jede Bühne, besessen davon, nie wieder „eine lockere Schraube zu übersehen“ – selbst wenn er dafür Menschen und Maschinen mit derselben Härte behandelt.
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">📜</span>
+                    <h2 class="section-title">Deine Geschichte</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <p class="text-content">
+                    Jasper war Versicherungsprüfer, ein Beruf, der perfekt zu seiner obsessiven, pedantischen Art passte. Bei einer Zirkusinspektion stufte er eine Schraube als „grenzwertig, aber noch tragbar“ ein, woraufhin wenige Tage später eine Artistin stürzte – die Schuld fraß ihn auf. Er kündigte, kaufte sich eine Bauchredner-Puppe, weil er es kaum ertrug, Menschen direkt anzusehen, und zog als wandernder Sicherheitsfanatiker durch kleine Zirkusse, um „Buße zu tun“. Valentin stellte ihn ein, überzeugt davon, dass ein paranoider Kontrollfreak nützlich sei, ahnte aber nicht, dass Jasper irgendwann erkennen würde, dass der Direktor selbst das größte Sicherheitsrisiko im System ist.
+                </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">⚡</span>
+                    <h2 class="section-title">Emotionales Profil</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="trait-grid">
+                    <div class="trait-item">
+                        <span class="trait-icon">📋</span>
+                        <div><span class="trait-label">Kontrollfreak</span><span class="trait-desc">Muss alles prüfen, sonst droht Panik.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🚧</span>
+                        <div><span class="trait-label">Sicherheits-besessen</span><span class="trait-desc">Schreibt Berichte, rüttelt an allem, sucht Gefahren.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🧹</span>
+                        <div><span class="trait-label">OCD-Tendenzen</span><span class="trait-desc">Sortiert nachts heimlich Müll, braucht absolute Ordnung.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🔨</span>
+                        <div><span class="trait-label">Technisch unsicher</span><span class="trait-desc">Kompensiert fehlendes Know-how mit „Percussive Maintenance“ (draufhauen).</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🚽</span>
+                        <div><span class="trait-label">Sozial überfordert</span><span class="trait-desc">Flüchtet häufig aufs Klo, redet lieber über die Puppe.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🧸</span>
+                        <div><span class="trait-label">Einsam</span><span class="trait-desc">Die Puppe ist dein einziger echter „Freund“.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">📉</span>
+                        <div><span class="trait-label">Intolerant</span><span class="trait-desc">Niedrige Toleranz für Inkompetenz – hält andere rasch für Idioten.</span></div>
+                    </div>
+                    <div class="trait-item">
+                        <span class="trait-icon">🤐</span>
+                        <div><span class="trait-label">Passiv-aggressiv</span><span class="trait-desc">Äußert Wut und Beleidigungen vor allem über die Stimme der Puppe.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">🗣️</span>
+                    <h2 class="section-title">Deine Vorstellung</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; color: var(--accent-gold); font-weight: bold;">Das könntest du über dich in der ersten Runde sagen:</p>
+                <div class="essence-box" style="margin-bottom: 1rem; border-left-color: var(--accent-gold);">
+                    „Ich bin Jasper Kohl. Bauchredner. Und Sicherheitsbeauftragter. Früher habe ich Versicherungsfälle geprüft – jetzt prüfe ich euch. Eure Seile, eure Schrauben, eure Bühnen. Ich habe einmal eine lockere Schraube übersehen. Eine Artistin ist gefallen. Seitdem ist jede Schraube für mich eine Frage von Leben und Tod. Wenn ich sage, etwas ist ein Sicherheitsrisiko, dann ist das keine Marotte. Das ist Buße.“<br><br>
+                    <span style="font-style: normal; color: var(--text-muted); font-size: 0.9em;">(Dann hebt die Puppe leicht den Kopf:)</span><br>
+                    <span style="color: var(--accent-cream); font-weight: bold;">"Was Jasper sagen will: Er ist der Einzige hier, der weiß, wie man eine Schraube anzieht, ohne dass jemand stirbt. Er kontrolliert Dinge, die niemanden interessieren, und rettet euch täglich das Leben, ohne dass ihr's merkt. Ihr seid willkommen, übrigens."</span>
+                </div>
+                <p style="margin-bottom: 1rem; font-style: italic; color: var(--text-muted); font-size: 0.9rem;">
+                    Sprich leise, kontrolliert, fast trocken. Blick eher auf den Boden oder auf die Puppe, nicht direkt ins Publikum. Lass die Puppe den letzten Satz übernehmen – mit zynischer, höherer Stimme.
+                </p>
+                <p style="margin-top: 1rem;"><strong>Zusätzliche Hinweise:</strong></p>
+                <ul class="mission-list" style="margin-top: 0.5rem;">
+                    <li>Nenne Name & Rolle</li>
+                    <li>Erwähne, dass du früher Versicherungsprüfer warst</li>
+                    <li>Der Unfall in der Vergangenheit ist der Grund, warum du hier bist</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">🔐</span>
+                    <h2 class="section-title">Deine 5 Geheimnisse</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; font-style: italic; opacity: 0.8;">Klicke auf die einzelnen Geheimnisse, um sie zu lesen:</p>
+
+                <div class="secret-box">
+                    <div class="secret-inner-header" onclick="">
+                        <div>
+                            <div class="secret-number">Geheimnis 1 – Das Mordmotiv</div>
+                            <div class="secret-title">„Der Doomsday-Bericht“</div>
+                        </div>
+                        <span class="toggle-icon secret-toggle-icon">▼</span>
+                    </div>
+                    <div class="secret-inner-content">
+                        <p>Du bist bekannt dafür, dass du alles kontrollierst. Vor Wochen hast du einen <strong>„Doomsday-Bericht“</strong> verfasst:</p>
+                        <p>Eine 50-seitige, über-detaillierte Analyse mit dem Titel <strong>„Sicherheitsbericht 4B – Hypothetische fatale Ausfälle“</strong>. Darin hast du pedantisch aufgelistet, wie genau die Geräte versagen könnten. Du hast diese Details aus Verantwortung dokumentiert – damit Valentin sie Fixen würde.</p>
+                        <p>Aber Valentin hatte den Bericht nicht zur Reparatur genutzt. Er hatte ihn als <strong>Anleitung</strong> benutzt und die Punkte abgehakt.</p>
+                        <p><strong>Das perfide Detail:</strong> Valentin hat dich heute Abend aus dem Programm gestrichen. Du darfst nicht auftreten. Stattdessen sollst du „Backstage die Sicherheit überwachen“. Du bist im Maschinenraum. Bei den Geräten.</p>
+                        <p><strong>Du hast seinen Plan durchschaut:</strong></p>
+                        <ul class="mission-list">
+                            <li>Valentin würde die Unfälle exakt nach deinem Bericht herbeiführen</li>
+                            <li>Du wärst nicht auf der Bühne, sondern bei den Maschinen – kein Alibi, aber am Tatort</li>
+                            <li>Dein eigener Bericht würde als Geständnis gegen dich verwendet werden</li>
+                        </ul>
+                        <p>Valentin wollte dich nicht nur feuern – er wollte dich als wahnsinnigen Saboteur lebenslänglich ins Gefängnis bringen.</p>
+                        <p style="margin-top: 1rem; color: var(--primary-red); font-weight: bold;">                    </div>
+                </div>
+
+                <div class="secret-box">
+                    <div class="secret-inner-header" onclick="">
+                        <div>
+                            <div class="secret-number">Geheimnis 2 – Das Ablenkungsgeheimnis</div>
+                            <div class="secret-title">„Percussive Maintenance (Der Schläger)“</div>
+                        </div>
+                        <span class="toggle-icon secret-toggle-icon">▼</span>
+                    </div>
+                    <div class="secret-inner-content">
+                        <p>Du warst heute im Maschinenraum. Du standest vor der Hauptwinde des Riesenrades, hochrot im Kopf, und hast mit einem riesigen Schraubenschlüssel wild auf die Maschine eingeschlagen. Du hast dagegen getreten und geschrien: „Willst du wohl funktionieren, du Stück Schrott!“</p>
+                        <p><strong>Die Wahrheit:</strong> Das ist deine berühmte „Percussive Maintenance“. Du reparierst Dinge, indem du sie physisch misshandelst, weil du keine echte technische Kompetenz hast. Ein normaler Techniker würde die Winde ölen. Du trittst dagegen, bis sich der Bolzen löst.</p>
+                        <p>Es ist dir unangenehm das zuzugeben. Heute hat das funktioniert: Du hast die Winde „repariert“, ohne sie zu beschädigen. Du hast potenziell Leben gerettet.</p>
+                        <p><strong>Das Problem:</strong> Für jeden, der dich dabei beobachtet hat, sah es aus wie blinde Zerstörungswut. Es sah aus, als würdest du die Anlage sabotieren – was perfekt zu Valentins Framing-Plan passen würde.</p>
+                        <p>Wenn jemand dich dabei gesehen hat, bist du verdächtig. Verdächtig nicht nur für den Mord, sondern für den Grund, den Valentin dir in die Schuhe schieben wollte.</p>
+                    </div>
+                </div>
+
+                <div class="secret-box">
+                    <div class="secret-inner-header" onclick="">
+                        <div>
+                            <div class="secret-number">Geheimnis 3 – Kleines persönliches Geheimnis A</div>
+                            <div class="secret-title">„Der Müll-Monk von Hilpertsau“</div>
+                        </div>
+                        <span class="toggle-icon secret-toggle-icon">▼</span>
+                    </div>
+                    <div class="secret-inner-content">
+                        <p>Du hältst das Chaos im Zirkus nicht aus. Nachts, wenn alle schlafen, schleichst du heimlich über das Gelände und sortierst den Müll der anderen nach.</p>
+                        <p>Du holst Plastik aus dem Restmüll, trennst Buntglas von Weißglas, faltest Kartons ordentlich. Du führst eine geheime <strong>„Sünder-Liste“</strong> darüber, wer den Müll am schlechtesten trennt. (Spoiler: Saphira ist deine Nummer 1.)</p>
+                        <p>Du hasst sie alle dafür, aber du musst es tun – sonst kriegst du nervösen Hautausschlag. Es ist nicht optional. Es ist Überlebensmechanismus.</p>
+                        <p>Wenn das jemand entdeckt, sieht es entweder wahnsinnig aus oder es macht dich verletzlich. Beides ist schlecht.</p>
+                    </div>
+                </div>
+
+                <div class="secret-box">
+                    <div class="secret-inner-header" onclick="">
+                        <div>
+                            <div class="secret-number">Geheimnis 4 – Kleines persönliches Geheimnis B</div>
+                            <div class="secret-title">„Das Klo-Gespräch“</div>
+                        </div>
+                        <span class="toggle-icon secret-toggle-icon">▼</span>
+                    </div>
+                    <div class="secret-inner-content">
+                        <p>Wenn du von sozialen Interaktionen überfordert bist (also ständig), flüchtest du auf das einzige stille Örtchen, das abschließbar ist.</p>
+                        <p>Dort führst du Krisensitzungen mit deiner Puppe. Du setzt die Puppe auf den Spülkasten und diskutierst lautstark mit ihr den Tag.</p>
+                        <p>Wer draußen steht, denkt, da drin sind zwei Leute, die einen Putsch planen. Dabei ist es nur deine Bewältigungsstrategie. Dein Überlebensmechanismus.</p>
+                        <p>Die Puppe ist nicht dein „imaginärer Freund“. Sie ist dein echter Freund. Und manchmal fragt sie dich Fragen, auf die du keine Antworten hast.</p>
+                    </div>
+                </div>
+
+                <div class="secret-box">
+                    <div class="secret-inner-header" onclick="">
+                        <div>
+                            <div class="secret-number">Geheimnis 5 – Das peinliche Geheimnis</div>
+                            <div class="secret-title">„Casanova“</div>
+                        </div>
+                        <span class="toggle-icon secret-toggle-icon">▼</span>
+                    </div>
+                    <div class="secret-inner-content">
+                        <p>Du hast ein Tinder-Profil. Aber nicht für dich. Für deine Puppe. Das Profilfoto ist die Puppe (mit Sonnenbrille). Die Bio ist charmant, witzig und draufgängerisch – alles, was du nicht bist:</p>
+                        <ul class="mission-list">
+                            <li>„Ich bin aus hartem Holz geschnitzt. Und flexible? Das auch. 😉“</li>
+                            <li>„Suche jemanden, die meine Splitter akzeptiert“</li>
+                            <li>„Kein Spielzeug. Echte Gefühle“</li>
+                        </ul>
+                        <p><strong>Das Peinliche:</strong> Die Puppe hat Matches. Viele. Du schreibst stundenlang mit Frauen in der Rolle der Puppe. („Hey Baby, ich bin aus hartem Holz geschnitzt – hast du Lust, meine Splitter zu spüren?“)</p>
+                        <p>Du bist eifersüchtig auf das Liebesleben deines eigenen Requisits. Die Puppe bekommt Nachrichten, Bilder, sogar echte Dates (Video-Calls).</p>
+                        <p><strong>Der Druck:</strong> Heute Abend hat die Puppe ein „Date“ – einen Video-Call mit einer Frau namens Chantal. Du MUSST den Mord schnell lösen, damit du pünktlich die Puppe vor die Kamera halten kannst.</p>
+                        <p>Wenn das rauskommt, bist du nicht nur ein Loser. Du bist ein Creep, der Frauen mit einer Holzfigur manipuliert.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">👥</span>
+                    <h2 class="section-title">Deine Beziehungen</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="relationship-item">
+                    <div class="relationship-name">Valentin<span class="relationship-role">Investor (Das Opfer)</span></div>
+                    <p class="relationship-desc">Am Anfang Hoffnung: Endlich ein Chef, der Sicherheit „ernst“ zu nehmen schien. Der Wendepunkt kam mit Sicherheitsbericht 4B. Er nutzte ihn nicht zur Prävention, sondern als Bauplan für Unfälle, um dich als Saboteur aussehen zu lassen. Aus Anerkennung wurde purer Verrat – Valentin ist für dich das ultimative Sicherheitsrisiko in Menschengestalt.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Sera<span class="relationship-role">Porzellanpuppe</span></div>
+                    <p class="relationship-desc">Sie hört dir wenigstens zu, wenn du von Mängeln redest, auch wenn sie dabei oft erstarrt. Ihre Zerbrechlichkeit triggert deine Schuldgefühle: Noch eine Artistin, die fallen könnte, wenn du versagst.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Saphira<span class="relationship-role">Chaos-Entertainerin</span></div>
+                    <p class="relationship-desc">Trennt den Müll nicht und nimmt deine Protokolle nicht ernst – eine wandelnde „Sünderin“. Ihre Lautstärke und ihr Chaos sind für dich permanenter Stress. Du beobachtest sie genau, weil sie ständig an sensiblen Stellen auftaucht.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Ruben<span class="relationship-role">Fakir</span></div>
+                    <p class="relationship-desc">Ruhig, gelassen, scheinbar unverwundbar – das irritiert dich. Du verstehst nicht, wie jemand, der auf Nägeln liegt, so wenig über Sicherheit nachdenken kann. Du empfindest ihn als unheimlich souverän.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Malik<span class="relationship-role">Cyber-Mentalist</span></div>
+                    <p class="relationship-desc">Der „Tech-Gnom“. Er starrt lieber auf Bildschirme, als an echten Schrauben zu drehen. Du fühlst dich von ihm belächelt, gerade nachdem er über dein Dating-Profil gelacht hat. Du hältst ihn für fachlich arrogant und praktisch nutzlos.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Damian<span class="relationship-role">Trickbetrüger</span></div>
+                    <p class="relationship-desc">Ein „Gauner in Plüschschuhen“. Er wirkt wie ein Risiko auf zwei Beinen. Du traust ihm nicht, respektierst aber, dass er seine Tricks offen als Täuschung verkauft, während Valentin mit echter Realität spielte.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Celeste<span class="relationship-role">Leitung</span></div>
+                    <p class="relationship-desc">Sie hörte sich einmal geduldig deinen Monolog an und quittierte ihn mit einem knappen „Gut gemacht“. Das bestätigte und frustrierte dich zugleich. Sie ist eine überlastete, halb abwesende Vorgesetzte, die deine Berichte abheftet, aber nicht durchsetzt.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Lena<span class="relationship-role">Stuntfrau</span></div>
+                    <p class="relationship-desc">Du hast sie gefressen. Sie macht ihre eigenen „Checks“ und entscheidet irgendwie nach Vibe. Ihr Leichtsinn ist dein Albtraum; sie ist das personifizierte „wird schon schiefgehen“.</p>
+                </div>
+                <div class="relationship-item">
+                    <div class="relationship-name">Silas<span class="relationship-role">Clown</span></div>
+                    <p class="relationship-desc">Er teilt deine Obsession mit Gefahr, aber auf einer paranoiden Frequenz (Aliens). Du siehst in ihm einen bizarren Spiegel: Silas verliert sich in Aliens, du in Schrauben. Trotzdem ist er wohl das, was einem Freund am nächsten kommt.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">🎯</span>
+                    <h2 class="section-title">Deine Missionen</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="mission-box">
+                    <div class="mission-title">🔦 Startmission: „Sicherheits-Inspektion“</div>
+                    <div class="mission-subtitle">In den ersten 15 Minuten</div>
+                    <p><strong>Aufgabe:</strong> Prüfe mindestens 4 Gegenstände oder Möbel im Raum auf „TÜV-Konformität“.</p>
+                    <p style="margin-top: 1rem;"><strong>Konkrete Aktionen:</strong></p>
+                    <ul class="mission-list">
+                        <li>An Tischen rütteln</li>
+                        <li>Stühle testen (draufdrücken, kippen)</li>
+                        <li>Lampen, Vorhänge oder Podeste checken</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Verkünde dabei LAUT:</strong></p>
+                    <ul class="mission-list">
+                        <li>„Nicht TÜV-konform!“ oder „Sicherheitsrisiko!“</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Vorgabe:</strong> Mindestens 2 Dinge müssen durchfallen. Etabliere dich als derjenige, der alles prüft und damit nervt.</p>
+                </div>
+
+                <div class="mission-box">
+                    <div class="mission-title">🔄 Dauermission: „Der Stellvertreter“</div>
+                    <div class="mission-subtitle">Mindestens 25% deiner Sätze pro Runde</div>
+                    <p><strong>Aufgabe:</strong> Du lässt diese Sätze NUR über deine Puppe sprechen (bewege deinen eigenen Mund dabei kaum).</p>
+                    <p style="margin-top: 1rem;"><strong>Regel:</strong></p>
+                    <ul class="mission-list">
+                        <li>Wenn jemand fragt „Was denkst DU, Jasper?“, musst du zunächst die Puppe „befragen“ und dann ihre Antwort wiedergeben.</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Beispiele:</strong></p>
+                    <div class="phrases-grid" style="margin-top: 1rem;">
+                        <div class="phrase-item">[Puppe] Der Bericht sagt, dass hier alles schiefgehen wird.</div>
+                        <div class="phrase-item">[Puppe] Chef, die sind alle unzurechnungsfähig.</div>
+                        <div class="phrase-item">[Du] Die Puppe findet das… bedenklich.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">💬</span>
+                    <h2 class="section-title">Standard-Sätze</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 1rem; color: var(--text-muted); font-style: italic;">Sätze für den Alltag:</p>
+                <div class="phrases-grid">
+                    <div class="phrase-item">Das ist nicht TÜV-konform.</div>
+                    <div class="phrase-item">Das ist ein Sicherheitsrisiko.</div>
+                    <div class="phrase-item">Niemand nimmt Sicherheit hier ernst.</div>
+                    <div class="phrase-item">Ich kann nicht alles reparieren.</div>
+                    <div class="phrase-item">Percussive Maintenance. (beim Draufhauen)</div>
+                    <div class="phrase-item">Wir sind die letzte Bastion der Vernunft.</div>
+                    <div class="phrase-item">War doch nur die Figur… (nach Beleidigung)</div>
+                    <div class="phrase-item">[Puppe] Absolute Vollidioten, Boss.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">🎭</span>
+                    <h2 class="section-title">Wie du spielst</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">Du bist nicht der „lustige“ Bauchredner. Du bist der Mann, der die Welt festschrauben will.</p>
+                <div class="play-tips">
+                    <div class="play-tip"><span class="play-tip-icon">🔉</span><span>Sprich leise, kontrolliert, aber mit schneidender Schärfe.</span></div>
+                    <div class="play-tip"><span class="play-tip-icon">🧸</span><span>Nutze die Puppe für ehrliche und gemeine Aussagen.</span></div>
+                    <div class="play-tip"><span class="play-tip-icon">👀</span><span>Kontrolliere ständig: Rüttel an Dingen, prüf den Boden, Blick zur Decke.</span></div>
+                    <div class="play-tip"><span class="play-tip-icon">🏃</span><span>Flüchte bei Konfrontation (Toilette, „muss was prüfen“).</span></div>
+                    <div class="play-tip"><span class="play-tip-icon">🔧</span><span>Rationalisiere den Mord als „Austausch eines defekten Bauteils“.</span></div>
+                </div>
+                <p style="margin-top: 1.5rem; font-weight: 600; color: var(--accent-gold);">Übergeordnetes Ziel: Nicht als Saboteur verhaftet werden. Beweise (dir selbst), dass du Leben gerettet hast.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">💡</span>
+                    <h2 class="section-title">Improvisationsregeln</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="highlight-box" style="margin-bottom: 1.5rem;">
+                    <p><strong>Regel bei Geheimnissen:</strong> Du musst im Kern ehrlich sein, darfst aber framing nutzen („Ja, aber…“, „Das war Prävention“).</p>
+                </div>
+                <div class="improv-example">
+                    <div class="improv-question">„Warst du im Direktionswagen?“</div>
+                    <div class="improv-answer">„Ich war da, um über den Bericht zu reden. Über Sicherheitslücken. Nicht um jemanden umzubringen.“</div>
+                </div>
+                <div class="improv-example">
+                    <div class="improv-question">„Hast du Valentin angefasst?“</div>
+                    <div class="improv-answer">„Ich habe versucht, einen Schaden zu beheben. Wenn ein System bereits tot ist, kann man es nicht noch töter machen.“</div>
+                </div>
+                <div class="improv-example">
+                    <div class="improv-question">„Warum schlägst du auf Maschinen ein?“</div>
+                    <div class="improv-answer">„Manche Systeme reagieren besser auf klare, physische Kommunikation. Das nennt sich Percussive Maintenance.“</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="">
+                <div class="header-content">
+                    <span class="section-icon">⭐</span>
+                    <h2 class="section-title">Final Reminder</h2>
+                </div>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="section-content">
+                <div class="highlight-box">
+                    <p>Jasper ist nicht der „komische Bauchredner mit der Puppe“, sondern ein Mann, der einmal eine Schraube falsch eingeschätzt hat und seitdem versucht, die ganze Welt festzuschrauben, damit nie wieder jemand fällt.</p>
+                    <p style="margin-top: 1rem;">Seine Puppe ist seine Stimme, seine Berichte sind seine Beichte, und der Mord an Valentin ist für ihn weniger ein Verbrechen als eine <strong>drastische Reparaturmaßnahme an einem System, das sonst alle zermalmt.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-circus">🎪 Zirkus Absurdum 🎪</div>
+            <div class="footer-tagline">Das Krimi-Dinner wartet auf dich</div>
+        </footer>
+    </div>
+
+    <script>
+        // SCRIPT FÜR INTERAKTIVITÄT
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            document.addEventListener('click', function(e) {
+
+                // 1. Check: Wurde ein Haupt-Section-Header geklickt?
+                const sectionHeader = e.target.closest('.section-header');
+                
+                // 2. Check: Wurde ein Geheimnis-Header geklickt?
+                const secretHeader = e.target.closest('.secret-inner-header');
+
+                // Logik für Geheimnisse (muss vor Sektion kommen)
+                if (secretHeader) {
+                    const box = secretHeader.closest('.secret-box');
+                    if (box) {
+                        box.classList.toggle('active');
+                        e.stopPropagation(); 
+                        return;
+                    }
+                }
+
+                // Logik für Haupt-Sektionen
+                if (sectionHeader) {
+                    const section = sectionHeader.closest('.section');
+                    if (section) {
+                        section.classList.toggle('open');
+                    }
+                }
+            });
+        });
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            body.classList.toggle('light-mode');
+
+            if (body.classList.contains('light-mode')) {
+                btn.textContent = '🌙 Dunkel';
+            } else {
+                btn.textContent = '☀️ Hell';
+            }
+        }
+    </script>
+</body>
+</html>
